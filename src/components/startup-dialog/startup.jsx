@@ -8,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+
 
 const rows = [
   { index: "1", wavelength: "434, 544, 434" },
@@ -28,6 +30,7 @@ const rows = [
 ]
 
 function Startup() {
+  let navigate = useNavigate();
 
   const [content, setContent] = useState(false);
   const handleAquire = (e) => {
@@ -36,6 +39,9 @@ function Startup() {
   const handleCancel = (e) => {
     setContent(false);
   }
+  const handleSetting =()=>{
+    navigate('/settings')
+  }
   return (
     <>
       <div className="startup-container">
@@ -43,7 +49,7 @@ function Startup() {
           <div className='header'> Startup Page
           </div>
           <div style={{ marginTop: "20px" }}>
-            <button className='styled-buttons'>Settings...</button>
+            <button className='styled-buttons' onClick={handleSetting}>Settings...</button>
             <button className='styled-buttons' onClick={(e) => handleAquire(e)}>Aquire Data!</button>
           </div>
 
