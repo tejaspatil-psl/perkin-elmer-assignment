@@ -7,8 +7,6 @@
 .startup-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    text-align: center;
 }
 .startup-dialog {
     border: 1px solid darkgray;
@@ -35,14 +33,14 @@ button {
     height: 235px !important;
     margin-left: 1.5rem;
     margin-top: 2rem;
-    overflow-x: hidden !important;
+    overflow-x: auto !important;
     overflow-y: auto !important;
     box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.25) !important;
 }
-.css-1ex1afd-MuiTableCell-root {
-    /* line-height: 0.43 !important; */
+.css-dwuj3p-MuiTableCell-root {
     padding: 4px 12px !important;
+    background: rgb(255, 255, 202) !important;
 }
-.css-y8ay40-MuiTableCell-root{
+.css-1yhpg23-MuiTableCell-root {
     padding: 4px 12px !important;
 }
