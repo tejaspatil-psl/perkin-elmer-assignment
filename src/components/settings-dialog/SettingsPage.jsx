@@ -1,9 +1,11 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import './SettingPage.css';
 
 const SettingsPage = () => {
+    let navigate = useNavigate();
     const [settings, setSettings] = useState({
         numnerOfWells: '96',
         numberOfWavelengths: '1',
@@ -66,6 +68,7 @@ const SettingsPage = () => {
 
     const onCancelClick = (e) => {
         e.preventDefault();
+        navigate('/')
         setSettings({
             numnerOfWells: '96',
             numberOfWavelengths: '1',
@@ -124,15 +127,10 @@ const SettingsPage = () => {
                             autoComplete="off" />
                     </div>
                 ))}
-                {/* <div className='form-field'>
-                    <div>Lm1:</div>
-                    <TextField sx={{ width: 250 }} id="outlined-basic" variant="outlined" autoComplete="off" />
-                </div> */}
-                <div style={{ marginTop: "8%" }}>
+                <div style={{ marginTop: "15%" }}>
                     <button className='styled-buttons' onClick={onOkClick} disabled={isOkButtonDisable}>Ok</button>
                     <button className='styled-buttons' onClick={onCancelClick}>Cancel</button>
                 </div>
-                {/* <div className='form-field'><div>Number of wells:</div><div>hi</div></div> */}
             </form>
         </div>
     )

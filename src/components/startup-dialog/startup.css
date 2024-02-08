@@ -1,0 +1,46 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: skyblue;
+}
+.startup-container {
+    display: flex;
+    justify-content: center;
+}
+.startup-dialog {
+    border: 1px solid darkgray;
+    width: 30rem;
+    height: 30rem;
+}
+
+button {
+    cursor: pointer;
+}
+.styled-buttons{
+    padding: 8px 20px;
+    margin: 4px 10px;
+    border-radius: 4px;
+    min-width: 8rem;
+    background: rgb(255, 255, 253);
+}
+.styled-buttons:hover {
+    background: rgb(165, 215, 235);
+}
+
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root {
+    width: 90% !important;
+    height: 235px !important;
+    margin-left: 1.5rem;
+    margin-top: 2rem;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.25) !important;
+}
+.css-dwuj3p-MuiTableCell-root {
+    padding: 4px 12px !important;
+    background: rgb(255, 255, 202) !important;
+}
+.css-1yhpg23-MuiTableCell-root {
+    padding: 4px 12px !important;
+}
