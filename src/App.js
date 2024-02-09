@@ -12,9 +12,7 @@ function App() {
         <BrowserRouter>
           <Routes >
             <Route exact path='/' element={<Startup />} />
-
             <Route exact path='/settings' element={<SettingsPage />} />
-
           </Routes>
         </BrowserRouter>
       </div>
