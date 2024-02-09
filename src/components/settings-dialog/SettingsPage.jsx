@@ -123,6 +123,7 @@ const SettingsPage = () => {
 
   const onOkClick = (e) => {
     e.preventDefault();
+    navigate("/");
     setSettings((prevSettings) => ({
       ...prevSettings,
     }));
