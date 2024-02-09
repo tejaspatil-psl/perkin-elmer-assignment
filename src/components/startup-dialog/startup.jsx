@@ -9,13 +9,13 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import axios from "axios";
 
-const rows = [
-  { index: "1", wavelength: "434, 544, 434" },
+const dummyData = [
+  { index: "1", wavelength: "333, 544, 434" },
   { index: "2", wavelength: "545, 343" },
   { index: "3", wavelength: "434, 544, 434" },
   { index: "4", wavelength: "434, 443" },
@@ -33,24 +33,51 @@ const rows = [
 ]
 
 function Startup() {
-  let navigate = useNavigate();
+  let navigate = useNavigate()
 
-  const [content, setContent] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [content, setContent] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(false)
+  const [rows, setRows] = useState([])
+
+  const fetchData = () => {
+    axios
+      .get("http://localhost:3000/rows")
+      .then((response) => {
+        if (response.data && response.data.length > 0) {
+          console.log("getdata", response.data) // Handle the response data here
+          setRows(response.data)
+          setIsDisabled(false)
+        } else {
+          console.error("Response data is empty or undefined")
+          setRows(dummyData)
+        }
+      })
+      .catch((error) => {
+        console.error("Error while fetching data:", error)
+        setRows(dummyData)
+      });
+  };
+
   const handleAquire = (e) => {
     if (content === true) {
-      setOpen(true);
+      setOpen(true)
     } else {
-      setContent(true);
-      setIsDisabled(true);
+      setContent(true)
+      fetchData()
+      setIsDisabled(true)
     }
   }
   const handleCancel = (e) => {
-    setContent(false);
-    setIsDisabled(false);
+    setContent(false)
+    setIsDisabled(false)
   }
   const handleSetting = () => {
     navigate('/settings')
+  }
+  const handleYes = () => {
+    setIsDisabled(true)
+    fetchData()
+    setOpen(false)
   }
   const style = {
     position: 'absolute',
@@ -63,9 +90,8 @@ function Startup() {
     boxShadow: 24,
     p: 4,
   };
-  
+
   const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
@@ -89,7 +115,7 @@ function Startup() {
               </TableHead>
               <TableBody>
                 {content && <>
-                  {rows.map((row) => (
+                  {rows?.map((row) => (
                     <TableRow
                       key={row.index}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -106,7 +132,6 @@ function Startup() {
             </Table>
           </TableContainer>
 
-          {/* <button onClick={handleOpen}>Open modal</button> */}
           <Modal
             open={open}
             onClose={handleClose}
@@ -118,8 +143,8 @@ function Startup() {
                 Would you like to override the existing data?
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-               <button className='styled-buttons'>Yes</button>
-               <button className='styled-buttons' onClick={() => setOpen(false)}>No</button>
+                <button className='styled-buttons' onClick={() => handleYes()}>Yes</button>
+                <button className='styled-buttons' onClick={() => setOpen(false)}>No</button>
               </Typography>
             </Box>
           </Modal>
