@@ -8,14 +8,16 @@ import "./SettingPage.css";
 const SettingsPage = () => {
   let navigate = useNavigate();
   const [settings, setSettings] = useState({
-    numnerOfWells: "96",
-    numberOfWavelengths: "1",
+    numnerOfWells: 96,
+    numberOfWavelengths: 1,
     lmValues: [0],
   });
   const [lmErrors, setLmErrors] = useState(
     Array(settings.numberOfWavelengths).fill(false)
   );
   const [isOkButtonDisable, setIsOkButtonDisable] = useState();
+  const [wellsText, setWellsText] = useState("");
+  const [wavelengthText, setWavelengthText] = useState("");
 
   useEffect(() => {
     const fetchData = () => {
@@ -23,15 +25,12 @@ const SettingsPage = () => {
         .get("http://localhost:3000/data")
         .then((response) => {
           if (response.data && response.data.length > 0) {
-            console.log("getdata", response.data[0]); // Handle the response data here
-            setSettings(response.data[0])
-            // setSettings((prevSettings) => ({
-            //   ...prevSettings,
-            //   numnerOfWells: response.data[0].numberOfWells,
-            //   numberOfWavelengths: response.data[0].numberOfWavelengths,
-            //   lmValues: Array(1).fill(),
-            //   // lmValues
-            // }));
+            console.log("getdata", response.data[response.data.length-1].numnerOfWells); // Handle the response data here
+            setSettings({
+              numnerOfWells: response.data[response.data.length-1]?.numnerOfWells,
+              numberOfWavelengths: response.data[response.data.length-1]?.numberOfWavelengths,
+              lmValues: response.data[response.data.length-1]?.lmValues,
+            });
           } else {
             console.error("Response data is empty or undefined");
           }
@@ -41,13 +40,6 @@ const SettingsPage = () => {
         });
     };
     fetchData();
-    if (settings.numberOfWavelengths === "1") {
-      setSettings((prevSettings) => ({
-        ...prevSettings,
-        lmValues: Array(1).fill(),
-        // lmValues
-      }));
-    }
     setLmErrors(Array(settings.numberOfWavelengths).fill(false));
     console.log("settingsafterfeach", settings);
   }, []);
@@ -66,7 +58,22 @@ const SettingsPage = () => {
     );
   }, [settings.lmValues, settings.numnerOfWells, settings.numberOfWavelengths]);
 
-  // console.log('isanyfieldempty', isAnyFieldEmpty)
+  const handletextWellsChange=(e,inputV)=>{
+    const isvalid=(/^[1-9]\d{0,2}$/.test(inputV) && inputV.length <= 4) || inputV === ''
+    if (isvalid) {
+      setWellsText(inputV)
+    } 
+    console.log("text......",inputV)
+  }
+
+  const handletextWavelengthChange=(e,inputV)=>{
+    const isvalid=(/^[1-9]\d{0,1}$/.test(inputV) && inputV.length <= 4) || inputV === ''
+    if (isvalid) {
+      setWavelengthText(inputV)
+    } 
+    console.log("text......",inputV)
+  }
+
   const handleWellsChange = (e, newValue) => {
     console.log("hiiiiii", newValue);
     e.preventDefault();
@@ -75,13 +82,12 @@ const SettingsPage = () => {
     setSettings((prevSettings) => ({
       ...prevSettings,
       numnerOfWells,
-      // lmValues
     }));
   };
 
   const handleWavelengthChange = (e, newValue) => {
     e.preventDefault();
-    console.log("hiiiii", newValue);
+    console.log("wavelength",typeof newValue);
     const numberOfWavelengths = newValue;
     const lmValues = Array.from(
       { length: numberOfWavelengths },
@@ -97,9 +103,12 @@ const SettingsPage = () => {
   };
 
   const handleLmValueChange = (index, value) => {
-    console.log("heyyy", value);
+    console.log("heyyy",typeof value);
     const newLmValues = [...settings.lmValues];
-    newLmValues[index] = value;
+    if ((/^[1-9]\d{0,3}$/.test(value) && value.length <= 4) || value === '') {
+      newLmValues[index] = value;
+    } 
+    
     setSettings((prevSettings) => ({
       ...prevSettings,
       lmValues: newLmValues,
@@ -123,10 +132,16 @@ const SettingsPage = () => {
 
   const onOkClick = (e) => {
     e.preventDefault();
+    const lmValuesInInt=settings.lmValues.map(str=>parseInt(str))
+    const FinalData={
+      numnerOfWells: parseInt(settings.numberOfWavelengths),
+    numberOfWavelengths: parseInt(settings.numnerOfWells),
+    lmValues: lmValuesInInt,
+    }
+    console.log("okdata",FinalData);
+   
     navigate("/");
-    setSettings((prevSettings) => ({
-      ...prevSettings,
-    }));
+    // console.log("oksettings",settings)
   };
 
   return (
@@ -141,9 +156,11 @@ const SettingsPage = () => {
             id="combo-box-demo"
             options={["24", "48", "96", "384"]}
             sx={{ width: 250 }}
-            value={settings.numnerOfWells}
+            value={settings.numnerOfWells?.toString()}
             onChange={handleWellsChange}
-            renderInput={(params) => <TextField {...params} />}
+            inputValue={wellsText}
+            onInputChange={handletextWellsChange}
+            renderInput={(params) => <TextField {...params}/>}
           />
         </div>
         <div className="form-field">
@@ -151,8 +168,10 @@ const SettingsPage = () => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            value={settings.numberOfWavelengths}
+            value={settings.numberOfWavelengths?.toString()}
             onChange={handleWavelengthChange}
+            inputValue={wavelengthText}
+            onInputChange={handletextWavelengthChange}
             options={["1", "2", "3", "4", "5", "6"]}
             sx={{ width: 250 }}
             renderInput={(params) => <TextField {...params} />}
