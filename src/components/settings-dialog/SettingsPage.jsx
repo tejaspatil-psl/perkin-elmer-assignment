@@ -26,12 +26,16 @@ const SettingsPage = () => {
         .get("http://localhost:5000/api/getsettings")
         .then((response) => {
           if (response.data && response.data.length > 0) {
-            setId(response.data[response.data.length-1]._id)
-            console.log("getdata", response.data[response.data.length-1].numnerOfWells); // Handle the response data here
+            setId(response.data[response.data.length - 1]._id);
+            console.log(
+              "getdata",
+              response.data[response.data.length - 1].numnerOfWells
+            ); // Handle the response data here
             setSettings({
-              numnerOfWells: response.data[response.data.length-1]?.wells,
-              numberOfWavelengths: response.data[response.data.length-1]?.wavelengths,
-              lmValues: response.data[response.data.length-1]?.lms,
+              numnerOfWells: response.data[response.data.length - 1]?.wells,
+              numberOfWavelengths:
+                response.data[response.data.length - 1]?.wavelengths,
+              lmValues: response.data[response.data.length - 1]?.lms,
             });
           } else {
             console.error("Response data is empty or undefined");
@@ -60,57 +64,98 @@ const SettingsPage = () => {
     );
   }, [settings.lmValues, settings.numnerOfWells, settings.numberOfWavelengths]);
 
-  const handletextWellsChange=(e,inputV)=>{
-    const isvalid=(/^[1-9]\d{0,2}$/.test(inputV) && inputV.length <= 4) || inputV === ''
-    if (isvalid) {
-      setWellsText(inputV)
-    } 
-    console.log("text......",inputV)
-  }
+  const handletextWellsChange = (e, inputV) => {
+    console.log("inputcheck", inputV);
 
-  const handletextWavelengthChange=(e,inputV)=>{
-    const isvalid=(/^[1-9]\d{0,1}$/.test(inputV) && inputV.length <= 4) || inputV === ''
+    const isvalid =
+      (/^[1-9]\d{0,2}$/.test(inputV) && inputV.length <= 4) || inputV === "";
     if (isvalid) {
-      setWavelengthText(inputV)
-    } 
-    console.log("text......",inputV)
-  }
+      setWellsText(inputV);
+    }
+    if (
+      inputV === "96" ||
+      inputV === "24" ||
+      inputV === "48" ||
+      inputV === "384"
+    ) {
+      setSettings((prevSettings) => ({
+        ...prevSettings,
+        numnerOfWells: inputV,
+      }));
+    }
+    console.log("text......", inputV);
+  };
+
+  const handletextWavelengthChange = (e, inputV) => {
+    const isvalid =
+      (/^[1-9]\d{0,1}$/.test(inputV) && inputV.length <= 4) || inputV === "";
+    if (isvalid) {
+      setWavelengthText(inputV);
+    }
+    if (
+      inputV === "1" ||
+      inputV === "2" ||
+      inputV === "3" ||
+      inputV === "4" ||
+      inputV === "5" ||
+      inputV === "6"
+    ) {
+      console.log("incide if", inputV);
+      const numberOfWavelengths = inputV;
+      const lmValues = Array.from(
+        { length: numberOfWavelengths },
+        (_, index) => settings.lmValues[index] || ""
+      );
+
+      setSettings((prevSettings) => ({
+        ...prevSettings,
+        numberOfWavelengths,
+        lmValues,
+      }));
+      setLmErrors(Array(numberOfWavelengths).fill(false));
+    }
+    console.log("setting in wave", settings);
+  };
 
   const handleWellsChange = (e, newValue) => {
     console.log("hiiiiii", newValue);
-    e.preventDefault();
-    const numnerOfWells = newValue;
+    if (newValue) {
+      e.preventDefault();
+      const numnerOfWells = newValue;
 
-    setSettings((prevSettings) => ({
-      ...prevSettings,
-      numnerOfWells,
-    }));
+      setSettings((prevSettings) => ({
+        ...prevSettings,
+        numnerOfWells,
+      }));
+    }
   };
 
   const handleWavelengthChange = (e, newValue) => {
     e.preventDefault();
-    console.log("wavelength",typeof newValue);
-    const numberOfWavelengths = newValue;
-    const lmValues = Array.from(
-      { length: numberOfWavelengths },
-      (_, index) => settings.lmValues[index] || ''
-    );
+    if (newValue) {
+      console.log("wavelength", typeof newValue);
+      const numberOfWavelengths = newValue;
+      const lmValues = Array.from(
+        { length: numberOfWavelengths },
+        (_, index) => settings.lmValues[index] || ""
+      );
 
-    setSettings((prevSettings) => ({
-      ...prevSettings,
-      numberOfWavelengths,
-      lmValues,
-    }));
-    setLmErrors(Array(numberOfWavelengths).fill(false));
+      setSettings((prevSettings) => ({
+        ...prevSettings,
+        numberOfWavelengths,
+        lmValues,
+      }));
+      setLmErrors(Array(numberOfWavelengths).fill(false));
+    }
   };
 
   const handleLmValueChange = (index, value) => {
-    console.log("heyyy",typeof value);
+    console.log("heyyy", typeof value);
     const newLmValues = [...settings.lmValues];
-    if ((/^[1-9]\d{0,3}$/.test(value) && value.length <= 4) || value === '') {
+    if ((/^[1-9]\d{0,3}$/.test(value) && value.length <= 4) || value === "") {
       newLmValues[index] = value;
-    } 
-    
+    }
+
     setSettings((prevSettings) => ({
       ...prevSettings,
       lmValues: newLmValues,
@@ -134,27 +179,28 @@ const SettingsPage = () => {
 
   const onOkClick = (e) => {
     e.preventDefault();
-    const lmValuesInInt=settings.lmValues.map(str=>parseInt(str))
-    const FinalData={
+    const lmValuesInInt = settings.lmValues.map((str) => parseInt(str));
+    const FinalData = {
       wavelengths: parseInt(settings.numberOfWavelengths),
       wells: parseInt(settings.numnerOfWells),
       lms: lmValuesInInt,
-    }
-    const headers = {
-      'Content-Type': 'application/json',
-      'Allow-Control-Allow-Methods':'PUT' // example header
     };
-    console.log("okdata",FinalData);
-    console.log("Id is here",id)
-    axios.put(`http://localhost:5000/api/updatesetting/${id}`,
-      FinalData
-    ,{headers})
-    .then(response=>{
-      console.log(response.data);
-    })
-    .catch(error =>{
-      console.error('Error:',error)
-    });
+    const headers = {
+      "Content-Type": "application/json",
+      "Allow-Control-Allow-Methods": "PUT", // example header
+    };
+    console.log("okdata", FinalData);
+    console.log("Id is here", id);
+    axios
+      .put(`http://localhost:5000/api/updatesetting/${id}`, FinalData, {
+        headers,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
     navigate("/");
     // console.log("oksettings",settings)
   };
@@ -167,7 +213,7 @@ const SettingsPage = () => {
         <div className="form-field">
           <div>Number of wells:</div>
           <Autocomplete
-            disablePortal
+            // freeSolo
             id="combo-box-demo"
             options={["24", "48", "96", "384"]}
             sx={{ width: 250 }}
@@ -175,13 +221,13 @@ const SettingsPage = () => {
             onChange={handleWellsChange}
             inputValue={wellsText}
             onInputChange={handletextWellsChange}
-            renderInput={(params) => <TextField {...params}/>}
+            renderInput={(params) => <TextField {...params} />}
           />
         </div>
         <div className="form-field">
           <div>Number of wavelengths:</div>
           <Autocomplete
-            disablePortal
+            // freeSolo
             id="combo-box-demo"
             value={settings.numberOfWavelengths?.toString()}
             onChange={handleWavelengthChange}
@@ -196,7 +242,7 @@ const SettingsPage = () => {
           <div key={index} className="form-field">
             <div>{`Lm${index + 1}:`}</div>
             <TextField
-              value={lmValues===0?'':lmValues}
+              value={lmValues === 0 ? "" : lmValues}
               onChange={(e) => handleLmValueChange(index, e.target.value)}
               sx={{ width: 250 }}
               error={lmErrors[index]}
