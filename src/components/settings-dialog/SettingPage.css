@@ -15,30 +15,3 @@
     justify-content: space-between;
     margin: 10px 0px;
 }
-
-button {
-    cursor: pointer;
-}
-
-.styled-buttons {
-    padding: 8px 20px;
-    margin: 4px 10px;
-    border-radius: 4px;
-    min-width: 8rem;
-    background: rgb(255, 255, 253);
-}
-
-.styled-buttons:disabled {
-    pointer-events: none;
-}
-
-.styled-buttons:hover {
-    background: rgb(165, 215, 235);
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background: skyblue;
-}
