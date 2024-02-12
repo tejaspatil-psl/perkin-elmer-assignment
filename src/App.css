@@ -1,6 +1,7 @@
 :root {
   --primary-color: rgb(165, 215, 235);
   --secondary-color: skyblue;
+  --button-text-color: black;
 }
 
 .App {
@@ -15,7 +16,7 @@ button {
   margin: 4px 10px;
   border-radius: 4px;
   min-width: 8rem;
-  /* color: red ; */
+  color: var(--button-text-color);
   background: rgb(255, 255, 253);
 }
 .styled-buttons:hover {
