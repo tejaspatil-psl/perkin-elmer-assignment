@@ -39,15 +39,33 @@ function Startup() {
   const [isDisabled, setIsDisabled] = useState(false)
   const [rows, setRows] = useState([])
   const [count, setCount] = useState(0)
+ 
+  const convert=(index,wavelength) =>{
+         console.log("index",index,wavelength)
+         let result =[];
+         for(let i=0;i<index.length;i++){
+             result.push({
+              index:index[i],
+              wavelength:wavelength[i].join(',')
+             })
+         }
+         return result
+  }
+  
 
   const fetchData = () => {
     axios
-      .get("http://localhost:3000/rows")
+      .get("http://localhost:3000/CalculatedData")
       .then((response) => {
-        if (response.data && response.data.length > 0) {
+        if (response) {
           console.log("getdata", response.data) // Handle the response data here
-          setRows(response.data)
-          setCount(response.data.length)
+          const index= Object.keys(response.data);
+          const wavelength = Object.values(response.data)
+          const data=convert(index,wavelength);
+          
+          console.log("getdataconvert",data)
+          setRows(data)
+          setCount(data.length)
           setIsDisabled(false)
         } else {
           console.error("Response data is empty or undefined")
