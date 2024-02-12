@@ -1,9 +1,9 @@
 {
     "data": [
         {
-            "numnerOfWells": 96,
-            "numberOfWavelengths": 1,
-            "lmValues": [0]
+            "wells": 96,
+            "wavelengths": 1,
+            "lms": [0]
         }
     ],
     "rows" : [
