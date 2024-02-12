@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -38,6 +38,7 @@ function Startup() {
   const [content, setContent] = useState(false)
   const [isDisabled, setIsDisabled] = useState(false)
   const [rows, setRows] = useState([])
+  const [count, setCount] = useState(0)
 
   const fetchData = () => {
     axios
@@ -46,6 +47,7 @@ function Startup() {
         if (response.data && response.data.length > 0) {
           console.log("getdata", response.data) // Handle the response data here
           setRows(response.data)
+          setCount(response.data.length)
           setIsDisabled(false)
         } else {
           console.error("Response data is empty or undefined")
@@ -69,8 +71,12 @@ function Startup() {
   }
   const handleCancel = (e) => {
     setContent(false)
+    setRows([])
     setIsDisabled(false)
   }
+  useEffect(() => {
+    console.log("rows", rows)
+  }, [rows])
   const handleSetting = () => {
     navigate('/settings')
   }
@@ -153,7 +159,7 @@ function Startup() {
             <button className='styled-buttons'>Ok</button>
             <button className='styled-buttons' onClick={(e) => handleCancel(e)}>Cancel</button>
           </div>
-
+          {content && <div style={{ color: "green" }}>{count} rows has been aquired.</div>}
         </div>
       </div>
     </>
