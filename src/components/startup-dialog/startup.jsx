@@ -55,7 +55,7 @@ function Startup() {
 
   const fetchData = () => {
     axios
-      .get("http://localhost:3000/CalculatedData")
+      .get("http://localhost:5000/api/getCalculatedData")
       .then((response) => {
         if (response) {
           console.log("getdata", response.data) // Handle the response data here
