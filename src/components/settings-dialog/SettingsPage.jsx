@@ -18,15 +18,15 @@ const SettingsPage = () => {
   const [isOkButtonDisable, setIsOkButtonDisable] = useState();
   const [wellsText, setWellsText] = useState("");
   const [wavelengthText, setWavelengthText] = useState("");
-  // const [id, setId] = useState("");
+  const [id, setId] = useState("");
 
   useEffect(() => {
     const fetchData = () => {
       axios
-        .get("http://localhost:3000/data")
+        .get("http://localhost:5000/api/getsettings")
         .then((response) => {
           if (response.data && response.data.length > 0) {
-            // setId(response.data[response.data.length-1]._id)
+            setId(response.data[response.data.length-1]._id)
             console.log("getdata", response.data[response.data.length-1].numnerOfWells); // Handle the response data here
             setSettings({
               numnerOfWells: response.data[response.data.length-1]?.wells,
@@ -140,16 +140,21 @@ const SettingsPage = () => {
       wells: parseInt(settings.numnerOfWells),
       lms: lmValuesInInt,
     }
+    const headers = {
+      'Content-Type': 'application/json',
+      'Allow-Control-Allow-Methods':'PUT' // example header
+    };
     console.log("okdata",FinalData);
-    // axios.put(`http://localhost:3000/data/${id}`,{
-    //   FinalData
-    // })
-    // .then(response=>{
-    //   console.log(response.data);
-    // })
-    // .catch(error =>{
-    //   console.error('Error:',error)
-    // });
+    console.log("Id is here",id)
+    axios.put(`http://localhost:5000/api/updatesetting/${id}`,
+      FinalData
+    ,{headers})
+    .then(response=>{
+      console.log(response.data);
+    })
+    .catch(error =>{
+      console.error('Error:',error)
+    });
     navigate("/");
     // console.log("oksettings",settings)
   };
