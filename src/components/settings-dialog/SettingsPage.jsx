@@ -29,9 +29,9 @@ const SettingsPage = () => {
             // setId(response.data[response.data.length-1]._id)
             console.log("getdata", response.data[response.data.length-1].numnerOfWells); // Handle the response data here
             setSettings({
-              numnerOfWells: response.data[response.data.length-1]?.numnerOfWells,
-              numberOfWavelengths: response.data[response.data.length-1]?.numberOfWavelengths,
-              lmValues: response.data[response.data.length-1]?.lmValues,
+              numnerOfWells: response.data[response.data.length-1]?.wells,
+              numberOfWavelengths: response.data[response.data.length-1]?.wavelengths,
+              lmValues: response.data[response.data.length-1]?.lms,
             });
           } else {
             console.error("Response data is empty or undefined");
@@ -136,9 +136,9 @@ const SettingsPage = () => {
     e.preventDefault();
     const lmValuesInInt=settings.lmValues.map(str=>parseInt(str))
     const FinalData={
-      numnerOfWells: parseInt(settings.numberOfWavelengths),
-    numberOfWavelengths: parseInt(settings.numnerOfWells),
-    lmValues: lmValuesInInt,
+      wavelengths: parseInt(settings.numberOfWavelengths),
+      wells: parseInt(settings.numnerOfWells),
+      lms: lmValuesInInt,
     }
     console.log("okdata",FinalData);
     // axios.put(`http://localhost:3000/data/${id}`,{
