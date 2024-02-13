@@ -24,6 +24,7 @@ button {
 }
 .styled-buttons:disabled {
   pointer-events: none;
+  color: #dbdbdb;
 }
 
 .header {
