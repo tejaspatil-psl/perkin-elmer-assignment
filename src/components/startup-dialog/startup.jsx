@@ -177,7 +177,7 @@ function Startup() {
             <button className='styled-buttons'>Ok</button>
             <button className='styled-buttons' onClick={(e) => handleCancel(e)}>Cancel</button>
           </div>
-          {content && <div style={{ color: "green" }}>{count} rows has been aquired.</div>}
+          {content && <div style={{ color: "green" }}>Wavelength values for {count} wells has been acquired.</div>}
         </div>
       </div>
     </>
