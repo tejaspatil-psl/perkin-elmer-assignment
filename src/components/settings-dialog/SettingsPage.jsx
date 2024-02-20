@@ -214,7 +214,7 @@ const SettingsPage = () => {
           <div>Number of wells:</div>
           <Autocomplete
             // freeSolo
-            id="combo-box-demo"
+            id="wells"
             options={["24", "48", "96", "384"]}
             sx={{ width: 250 }}
             value={settings.numnerOfWells?.toString()}
@@ -228,7 +228,7 @@ const SettingsPage = () => {
           <div>Number of wavelengths:</div>
           <Autocomplete
             // freeSolo
-            id="combo-box-demo"
+            id="wavelengths"
             value={settings.numberOfWavelengths?.toString()}
             onChange={handleWavelengthChange}
             inputValue={wavelengthText}
